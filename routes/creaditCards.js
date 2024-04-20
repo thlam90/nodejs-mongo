@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
     const colorFilter = req.query.color; // Lấy tham số màu từ query string
     let creditCards = await CreditCard.find();
 
-    const formattedCards = creditCards.map(card => {
+    const formattedCards = creditCards.map((card, index) => {
       const dueDate = moment(card.dueDate);
       const now = moment();
       const daysDiff = dueDate.diff(now, 'days', true);
@@ -37,6 +37,8 @@ router.get('/', async (req, res) => {
       }
 
       return {
+        id: card._id,
+        index: index +1,
         ...card._doc,
         dueDate: dueDate.format('DD-MM-YYYY'),
         color

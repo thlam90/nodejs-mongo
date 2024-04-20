@@ -48,6 +48,7 @@
         <table id="credit-card-table">
             <thead>
                 <tr>
+                    <th>STT</th>
                     <th>Số Thẻ</th>
                     <th>Ngân hàng</th>
                     <th>Chủ Thẻ</th>
@@ -74,6 +75,9 @@
             <tbody>
                 <% creditCards.forEach(card=> { %>
                     <tr id="card-row-<%= card._id %>">
+                        <td>
+                            <%= card.index %>
+                        </td>
                         <td>
                             <%= card.cardNumber %>
                         </td>
