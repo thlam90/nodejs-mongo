@@ -9,9 +9,10 @@ const dueDate = new Date();
 const formattedDueDate = moment(dueDate).format('DD-MM-YYYY');
 // Route to render the main page
 router.get('/', async (req, res) => {
-
   try {
-    const creditCards = await CreditCard.find();
+    const colorFilter = req.query.color; // Lấy tham số màu từ query string
+    let creditCards = await CreditCard.find();
+
     const formattedCards = creditCards.map(card => {
       const dueDate = moment(card.dueDate);
       const now = moment();
@@ -20,20 +21,27 @@ router.get('/', async (req, res) => {
       let color;
       if (daysDiff < 0) {
         color = 'black';
-      } else if (daysDiff < 5) {
+      } else if (daysDiff < 3) {
         color = 'red';
-      } else if (daysDiff <= 15) {
+      } else if (daysDiff < 6) {
         color = 'yellow';
-      } else {
-        color = '#99FF00';
+      } else if (daysDiff <10){
+        color = '#99FF00'; // Green
+      }else{
+        color = 'pink';
+      }
+
+      // Bổ sung kiểm tra nếu có bộ lọc màu và màu của thẻ không khớp với bộ lọc
+      if (colorFilter && color !== colorFilter) {
+        return null; // Loại bỏ những thẻ không khớp
       }
 
       return {
         ...card._doc,
         dueDate: dueDate.format('DD-MM-YYYY'),
-        color // Thêm trường color vào đối tượng để sử dụng trong template
+        color
       };
-    });
+    }).filter(card => card !== null); // Loại bỏ những thẻ không khớp sau khi map
 
     res.render('index', {
       creditCards: formattedCards
@@ -66,6 +74,7 @@ router.post('/', async (req, res) => {
     cardHolderName: req.body.cardHolderName,
     bankName: req.body.bankName,
     customerName: req.body.customerName,
+    amount: req.body.amount,
     dueDate: new Date(req.body.dueDate),
   });
 
@@ -127,7 +136,7 @@ const banks = [
   "Ngân hàng TMCP Việt Nam Thương Tín (Vietbank)",
   "Ngân hàng TMCP Sài Gòn Công Thương (Saigonbank)",
   "Ngân hàng TMCP Công thương (Vietnam Export Import Bank - Eximbank)",
-  "VPBank Finance Company Limited (FE Credit)",
+  " VPBank Finance Company Limited (FE Credit)",
   "Ngân hàng Thương mại Cổ phần Quốc tế (VIB)",
   "Ngân hàng Công thương Á Âu (CIMB)",
   "Home Credit Group(Home)"
@@ -233,6 +242,7 @@ router.post('/edit/:id', async (req, res) => {
       cardHolderName: req.body.cardHolderName.toUpperCase(), // Chuyển tên chủ thẻ thành chữ hoa
       bankName: req.body.bankName,
       customerName: req.body.customerName,
+      amount: req.body.amount,
       dueDate: req.body.dueDate
     }, {
       new: true
@@ -251,10 +261,10 @@ router.post('/edit/:id', async (req, res) => {
 // xóa thẻ
 router.post('/delete/:id', async (req, res) => {
   try {
-      await CreditCard.findByIdAndDelete(req.params.id);
-      res.redirect('/'); // Chuyển hướng người dùng trở lại trang chính sau khi xóa
+    await CreditCard.findByIdAndDelete(req.params.id);
+    res.redirect('/'); // Chuyển hướng người dùng trở lại trang chính sau khi xóa
   } catch (error) {
-      res.status(500).send("Lỗi khi xóa thẻ: " + error);
+    res.status(500).send("Lỗi khi xóa thẻ: " + error);
   }
 });
 
