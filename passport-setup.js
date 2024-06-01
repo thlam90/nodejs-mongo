@@ -3,7 +3,7 @@ const passport = require('passport');
 
 // Giả định hàm lấy dữ liệu người dùng từ CSDL
 const getUserByUsername = async (username) => {
-    return { id: '123', username: 'admin', password: 'admin' };
+    return { id: '123', username: 'admin', password: 'bobongmuoi567' };
 };
 
 const authenticateUser = async (username, password, done) => {
