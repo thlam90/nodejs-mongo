@@ -58,8 +58,8 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background: rgb(2,0,36);
-background: linear-gradient(343deg, rgba(2,0,36,1) 0%, rgba(47,234,129,0.7338585092240021) 21%, rgba(35,229,160,1) 47%, rgba(35,229,161,1) 64%, rgba(25,224,187,1) 84%, rgba(0,212,255,1) 100%);
+    background: rgb(233,246,247);
+background: linear-gradient(90deg, rgba(233,246,247,0.5243347338935574) 0%, rgba(236,236,249,1) 35%, rgba(174,241,255,1) 100%);
 }
 
 
